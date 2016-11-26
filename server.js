@@ -13,7 +13,7 @@ const server = http.createServer(requestHandler)
 
 client.publish('mqtt__topic', "some good mqtt message ",{qos: 0 , retain: false   }, ()=> console.log('GOT CB_MQTT'))
 var a = 0
-setInterval(() => client.publish('mqtt_loop', "count "+ a++ ,{qos:0, retain: false}, ()=> console.log('loop 200' + a) ), 100);
+setInterval(() => client.publish('mqtt_loop', "count "+ a++ ,{qos:0, retain: false}, ()=> console.log('loop 200' + a) ), 1000);
 server.listen(port, (err) => {  
   if (err) {
     return console.log('something bad happened', err)
@@ -21,3 +21,16 @@ server.listen(port, (err) => {
 
   console.log(`server is listening on ${port}`)
 })
+
+client.subscribe('message');
+ 
+client.on('message', function (topic, message) {
+  // message is Buffer
+  console.log("Message From Server: "+message.toString());
+  client.end();
+});
+
+
+// TODO: 
+//json string se data send karna hai publisher ko,
+//
